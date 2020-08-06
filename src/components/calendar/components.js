@@ -23,7 +23,7 @@ export const CalendarBox = styled.div`
         border-color: #896ac2;
       }
       &:focus {
-        box-shadow: 0 0 0 2px #db4ca9;
+        box-shadow: 0 0 0 2px #6fffb0;
       }
     }
 
@@ -36,7 +36,7 @@ export const CalendarBox = styled.div`
     }
 
     &:focus {
-      box-shadow: 0 0 0 2px #db4ca9;
+      box-shadow: 0 0 2px 2px #6fffb0;
     }
   }
 `;

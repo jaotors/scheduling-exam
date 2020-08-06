@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Sidebar, Avatar, Nav, Button } from 'grommet';
-import { Projects, Clock } from 'grommet-icons';
+import { Projects, Clock, User } from 'grommet-icons';
 import styled from 'styled-components';
 
 import Calendar from './components/calendar';
@@ -36,7 +36,10 @@ const App = () => {
         <SidebarArea>
           <Sidebar
             header={
-              <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
+              <Button
+                style={{ border: '1px solid #fff', borderRadius: '50%' }}
+                icon={<User />}
+              />
             }
           >
             <Nav>

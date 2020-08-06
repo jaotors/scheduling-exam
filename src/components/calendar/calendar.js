@@ -3,21 +3,18 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 
+import INITIAL_EVENTS from '../../fixtures/events.json';
+
 import { CalendarBox } from './components';
 
-let todayStr = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
-const INITIAL_EVENTS = [
-  {
-    id: 0,
-    title: 'All-day event',
-    start: todayStr,
-  },
-  {
-    id: 1,
-    title: 'Timed event',
-    start: todayStr + 'T12:00:00',
-  },
-];
+const renderEventContent = (evtInfo) => {
+  return (
+    <>
+      <span style={{ marginRight: 3, fontSize: 13 }}>{evtInfo.timeText}</span>
+      <b>{evtInfo.event.title}</b>
+    </>
+  );
+};
 
 const Calendar = () => {
   return (
@@ -29,8 +26,11 @@ const Calendar = () => {
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,listDay',
+          right: 'dayGridMonth,listWeek',
         }}
+        dayMaxEvents={true}
+        selectable={true}
+        eventContent={renderEventContent}
       />
     </CalendarBox>
   );

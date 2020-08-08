@@ -39,4 +39,14 @@ export const CalendarBox = styled.div`
       box-shadow: 0 0 2px 2px #6fffb0;
     }
   }
+
+  .fc-h-event {
+    border-color: #896ac2;
+    background-color: #896ac2;
+  }
+
+  .fc-event-main {
+    white-space: normal;
+    word-wrap: break-word;
+  }
 `;

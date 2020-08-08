@@ -1,9 +1,11 @@
 import React from 'react';
-import { Box, Sidebar, Avatar, Nav, Button } from 'grommet';
-import { Projects, Clock, User } from 'grommet-icons';
+import { Box } from 'grommet';
 import styled from 'styled-components';
 
+import { MatchContextProvider } from './contexts/matches';
+
 import Calendar from './components/calendar';
+import Sidebar from './components/sidebar';
 
 const Layout = styled.div`
   display: grid;
@@ -24,35 +26,27 @@ const MainArea = ({ children }) => (
   </Box>
 );
 
+const Route = () => {};
+
 const App = () => {
   return (
-    <div
-      style={{
-        width: '100vw',
-        height: '100vh',
-      }}
-    >
-      <Layout>
-        <SidebarArea>
-          <Sidebar
-            header={
-              <Button
-                style={{ border: '1px solid #fff', borderRadius: '50%' }}
-                icon={<User />}
-              />
-            }
-          >
-            <Nav>
-              <Button icon={<Projects />} hoverIndicator />
-              <Button icon={<Clock />} hoverIndicator />
-            </Nav>
-          </Sidebar>
-        </SidebarArea>
-        <MainArea>
-          <Calendar />
-        </MainArea>
-      </Layout>
-    </div>
+    <MatchContextProvider>
+      <div
+        style={{
+          width: '100vw',
+          height: '100vh',
+        }}
+      >
+        <Layout>
+          <SidebarArea>
+            <Sidebar />
+          </SidebarArea>
+          <MainArea>
+            <Calendar />
+          </MainArea>
+        </Layout>
+      </div>
+    </MatchContextProvider>
   );
 };
 

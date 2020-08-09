@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import listPlugin from '@fullcalendar/list';
+//import listPlugin from '@fullcalendar/list';
 import { MatchContext } from '../../contexts/matches';
 
 import { CalendarBox } from './components';
@@ -22,16 +22,15 @@ const renderEventContent = (evtInfo) => {
 const Calendar = () => {
   // this will go to contextAPI
   const [matches, setMatches] = useContext(MatchContext);
-  console.log('matches', matches);
   return (
     <CalendarBox>
       <FullCalendar
-        plugins={[dayGridPlugin, listPlugin]}
+        plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,listMonth',
+          right: 'dayGridMonth',
         }}
         dayMaxEvents={true}
         selectable={true}

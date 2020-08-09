@@ -15,12 +15,12 @@ export const CalendarBox = styled.div`
 
   .fc-button-primary {
     &:not(:disabled).fc-button-active {
-      background-color: #896ac2;
-      border-color: #896ac2;
+      background-color: #3d138d;
+      border-color: #3d138d;
 
       &:hover {
-        background-color: #896ac2;
-        border-color: #896ac2;
+        background-color: #3d138d;
+        border-color: #3d138d;
       }
       &:focus {
         box-shadow: 0 0 0 2px #6fffb0;

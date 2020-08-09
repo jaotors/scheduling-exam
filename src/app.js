@@ -1,11 +1,13 @@
 import React from 'react';
 import { Box } from 'grommet';
 import styled from 'styled-components';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import { MatchContextProvider } from './contexts/matches';
 
-import Calendar from './components/calendar';
 import Sidebar from './components/sidebar';
+import Calendar from './components/calendar';
+import MatchList from './components/match-list';
 
 const Layout = styled.div`
   display: grid;
@@ -26,27 +28,38 @@ const MainArea = ({ children }) => (
   </Box>
 );
 
-const Route = () => {};
+const Routes = () => (
+  <Switch>
+    <Route path="/" exact>
+      <Calendar />
+    </Route>
+    <Route path="/match-list" exact>
+      <MatchList />
+    </Route>
+  </Switch>
+);
 
 const App = () => {
   return (
-    <MatchContextProvider>
-      <div
-        style={{
-          width: '100vw',
-          height: '100vh',
-        }}
-      >
-        <Layout>
-          <SidebarArea>
-            <Sidebar />
-          </SidebarArea>
-          <MainArea>
-            <Calendar />
-          </MainArea>
-        </Layout>
-      </div>
-    </MatchContextProvider>
+    <Router>
+      <MatchContextProvider>
+        <div
+          style={{
+            width: '100vw',
+            height: '100vh',
+          }}
+        >
+          <Layout>
+            <SidebarArea>
+              <Sidebar />
+            </SidebarArea>
+            <MainArea>
+              <Routes />
+            </MainArea>
+          </Layout>
+        </div>
+      </MatchContextProvider>
+    </Router>
   );
 };
 

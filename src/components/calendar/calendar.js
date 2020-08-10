@@ -1,10 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
+
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-//import listPlugin from '@fullcalendar/list';
-import { MatchContext } from '../../contexts/matches';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
 
-import { CalendarBox } from './components';
+import { MatchContext } from '../../contexts/matches';
+import { momentDateFormatter } from '../../utils/helpers';
+
+import { CalendarBox, AddMatchLayer, RemoveMatchLayer } from './components';
 
 const renderEventContent = (evtInfo) => {
   return (
@@ -13,30 +17,103 @@ const renderEventContent = (evtInfo) => {
         <span style={{ marginRight: 3, fontSize: 13 }}>{evtInfo.timeText}</span>
       )}
       <span>
-        {evtInfo.event.title} <b>{evtInfo.event.extendedProps.meta.userName}</b>
+        {evtInfo.event.title}{' '}
+        <b>
+          {evtInfo.event.extendedProps.meta &&
+            evtInfo.event.extendedProps.meta.username}
+        </b>
       </span>
     </>
   );
 };
 
 const Calendar = () => {
-  // this will go to contextAPI
   const [matches, setMatches] = useContext(MatchContext);
+  const [calendarapi, setCalendarAPI] = useState({});
+  const [info, setInfo] = useState({});
+
+  // for modals
+  const [showAddModal, setShowAdd] = useState(false);
+  const [showRemoveModal, setShowRemove] = useState(false);
+
+  const handleDateSelect = (selectInfo) => {
+    const calendarApi = selectInfo.view.calendar;
+
+    setCalendarAPI(calendarApi);
+    setInfo(selectInfo);
+    setShowAdd(true);
+  };
+
+  const handleEventClick = (data) => {
+    setInfo({
+      event: data.event,
+      id: data.event.id,
+      title: data.event.title,
+      username: data.event.extendedProps.meta.username,
+    });
+    setShowRemove(true);
+  };
+
+  const onCalendarAdd = (data) => {
+    // adding it to the context match
+    const dateStart = momentDateFormatter(data.event.start);
+    const dateEnd = momentDateFormatter(data.event.end);
+
+    setMatches((prevMatches) =>
+      prevMatches.concat({
+        id: `${dateStart}-${dateEnd}${data.event.extendedProps.meta.username}`,
+        title: data.event.title,
+        start: data.event.allDay ? dateStart : data.event.start,
+        end: data.event.allDay ? dateEnd : data.event.end,
+        meta: data.event.extendedProps.meta,
+      })
+    );
+  };
+
+  const onCalendarRemove = (data) => {
+    const index = matches.findIndex((i) => i.id === data.event.id);
+    setMatches((prevMatches) =>
+      prevMatches.slice(0, index).concat(prevMatches.slice(index + 1))
+    );
+  };
+
+  const onCloseModal = () => {
+    // for closing all the modal
+    setShowAdd(false);
+    setShowRemove(false);
+  };
+
   return (
     <CalendarBox>
       <FullCalendar
-        plugins={[dayGridPlugin]}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth',
+          right: 'dayGridMonth,timeGridDay',
         }}
-        dayMaxEvents={true}
+        editable={true}
         selectable={true}
+        selectMirror={true}
+        dayMaxEvents={true}
         eventContent={renderEventContent}
         events={matches}
+        select={handleDateSelect}
+        eventAdd={onCalendarAdd}
+        eventRemove={onCalendarRemove}
+        eventClick={handleEventClick}
       />
+      {showAddModal && (
+        <AddMatchLayer
+          calendarApi={calendarapi}
+          selectInfo={info}
+          onClose={onCloseModal}
+        />
+      )}
+      {showRemoveModal && (
+        <RemoveMatchLayer info={info} onClose={onCloseModal} />
+      )}
     </CalendarBox>
   );
 };

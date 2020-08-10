@@ -28,14 +28,16 @@ const generateMatchDates = (
   }
 
   const listMatches = arrayDates.map((date) => {
-    const userName = faker.internet.userName();
+    const username = faker.internet.userName();
     return {
-      id: `${date}${userName}`,
+      id: `${+moment()}${username}`,
       title: `Match with`,
       start: date,
+      end: date,
       meta: {
-        userName,
-        date,
+        username,
+        start: date,
+        end: date,
       },
     };
   });

@@ -30,8 +30,8 @@ const List = styled.ul`
 
 export const MatchListBox = ({ onSearch, data }) => {
   const sortedData = data.sort((a, b) => {
-    const momentA = moment(a.meta.date);
-    const momentB = moment(b.meta.date);
+    const momentA = moment(a.meta.start);
+    const momentB = moment(b.meta.start);
     return momentA.diff(momentB);
   });
 
@@ -39,8 +39,22 @@ export const MatchListBox = ({ onSearch, data }) => {
     <MatchListBlock>
       <div
         css={`
-          width: 90%;
+          width: 70%;
           height: 90%;
+          max-height: 856px;
+          overflow-y: scroll;
+
+          &::-webkit-scrollbar {
+            width: 3px;
+          }
+
+          &::-webkit-scrollbar-track {
+            background: transparent;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+          }
         `}
       >
         <Box
@@ -88,11 +102,11 @@ export const MatchListBox = ({ onSearch, data }) => {
                         justify-content: space-between;
                       `}
                     >
-                      <b>{moment(match.meta.date).format('MMMM DD, YYYY')}</b>
-                      <b>{moment(match.meta.date).format('dddd')}</b>
+                      <b>{moment(match.meta.start).format('MMMM DD, YYYY')}</b>
+                      <b>{moment(match.meta.start).format('dddd')}</b>
                     </li>
                     <li>
-                      Match with <b>{match.meta.userName}</b>
+                      {match.title} <b>{match.meta.username}</b>
                     </li>
                   </React.Fragment>
                 );
@@ -100,7 +114,7 @@ export const MatchListBox = ({ onSearch, data }) => {
             ) : (
               <div
                 css={`
-                  min-height: 400px;
+                  min-height: 800px;
                   display: grid;
                   place-items: center;
                 `}
@@ -110,6 +124,13 @@ export const MatchListBox = ({ onSearch, data }) => {
             )}
           </List>
         </div>
+      </div>
+      <div
+        css={`
+          margin-left: 10px;
+        `}
+      >
+        <img src="https://media1.tenor.com/images/9b8183e36486c98d73bd5ed915c93b0c/tenor.gif" alt="pusheen-gaming" />
       </div>
     </MatchListBlock>
   );

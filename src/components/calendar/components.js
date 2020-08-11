@@ -102,7 +102,7 @@ export const AddMatchLayer = ({ calendarApi, selectInfo, onClose }) => {
         </Box>
         <Box direction="row" gap="medium" align="center" justify="center">
           <Button label="Add" primary={true} onClick={onAdd} />
-          <Button label="Cacnel" onClick={onClose} />
+          <Button label="Cancel" onClick={onClose} />
         </Box>
       </Box>
     </Layer>

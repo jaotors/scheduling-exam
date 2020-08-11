@@ -57,8 +57,6 @@ export const MatchListBox = ({ onSearch, data }) => {
     return momentA.diff(momentB);
   });
 
-  console.log(sortedData);
-
   const transformedData = matchesToList(sortedData);
 
   return (

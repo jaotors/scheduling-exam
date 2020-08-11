@@ -5,7 +5,7 @@ const randomNumber = (startTime, endTime) =>
   Math.floor(Math.random() * (endTime - startTime) + startTime);
 
 const generateMatchDates = (
-  matches = 10,
+  matches = 14,
   start = moment(),
   end = moment().add(30, 'days')
 ) => {
@@ -16,28 +16,20 @@ const generateMatchDates = (
   while (arrayDates.length < matches) {
     let rndNum = randomNumber(startTime, endTime);
     let date = moment(rndNum).format('YYYY-MM-DD');
-    let includeDate = arrayDates.includes(date);
-
-    while (includeDate) {
-      rndNum = randomNumber(startTime, endTime);
-      date = moment(rndNum).format('YYYY-MM-DD');
-      includeDate = arrayDates.includes(date);
-    }
 
     arrayDates.push(date);
   }
 
-  const listMatches = arrayDates.map((date) => {
+  const listMatches = arrayDates.map((date, key) => {
     const username = faker.internet.userName();
     return {
-      id: `${+moment()}${username}`,
+      id: `${+moment()}${key}${username}`,
       title: `Match with`,
       start: date,
-      end: date,
+      end: moment(date).add(1, 'days').format('YYYY-MM-DD'),
+      allDay: true,
       meta: {
         username,
-        start: date,
-        end: date,
       },
     };
   });

@@ -4,12 +4,34 @@ import moment from 'moment';
 import { Box, TextInput } from 'grommet';
 import { Search } from 'grommet-icons';
 
-const MatchListBlock = styled.div`
+import matchesToList from '../../utils/matchesToList';
+
+const MatchListArea = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const MatchListBlock = styled.div`
+  width: 70%;
+  height: 90%;
+  max-height: 856px;
+  overflow-y: scroll;
+  position: relative;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
 `;
 
 const List = styled.ul`
@@ -30,38 +52,26 @@ const List = styled.ul`
 
 export const MatchListBox = ({ onSearch, data }) => {
   const sortedData = data.sort((a, b) => {
-    const momentA = moment(a.meta.start);
-    const momentB = moment(b.meta.start);
+    const momentA = moment(a.start);
+    const momentB = moment(b.start);
     return momentA.diff(momentB);
   });
 
+  console.log(sortedData);
+
+  const transformedData = matchesToList(sortedData);
+
   return (
-    <MatchListBlock>
-      <div
-        css={`
-          width: 70%;
-          height: 90%;
-          max-height: 856px;
-          overflow-y: scroll;
-
-          &::-webkit-scrollbar {
-            width: 3px;
-          }
-
-          &::-webkit-scrollbar-track {
-            background: transparent;
-          }
-
-          &::-webkit-scrollbar-thumb {
-            background-color: rgba(0, 0, 0, 0.2);
-          }
-        `}
-      >
+    <MatchListArea>
+      <MatchListBlock>
         <Box
           direction="row"
           justify="between"
           css={`
+            position: sticky;
+            background-color: #f2f2f2;
             margin-bottom: 10px;
+            top: 0;
           `}
         >
           <Box
@@ -92,8 +102,8 @@ export const MatchListBox = ({ onSearch, data }) => {
           `}
         >
           <List>
-            {sortedData.length ? (
-              sortedData.map((match) => {
+            {transformedData.length ? (
+              transformedData.map((match) => {
                 return (
                   <React.Fragment key={match.id}>
                     <li
@@ -102,12 +112,16 @@ export const MatchListBox = ({ onSearch, data }) => {
                         justify-content: space-between;
                       `}
                     >
-                      <b>{moment(match.meta.start).format('MMMM DD, YYYY')}</b>
-                      <b>{moment(match.meta.start).format('dddd')}</b>
+                      <b>{moment(match.date).format('MMMM DD, YYYY')}</b>
+                      <b>{moment(match.date).format('dddd')}</b>
                     </li>
-                    <li>
-                      {match.title} <b>{match.meta.username}</b>
-                    </li>
+                    {match.meta.map((m) => {
+                      return (
+                        <li>
+                          {m.title} <b>{m.username}</b>
+                        </li>
+                      );
+                    })}
                   </React.Fragment>
                 );
               })
@@ -124,14 +138,17 @@ export const MatchListBox = ({ onSearch, data }) => {
             )}
           </List>
         </div>
-      </div>
+      </MatchListBlock>
       <div
         css={`
           margin-left: 10px;
         `}
       >
-        <img src="https://media1.tenor.com/images/9b8183e36486c98d73bd5ed915c93b0c/tenor.gif" alt="pusheen-gaming" />
+        <img
+          src="https://media1.tenor.com/images/9b8183e36486c98d73bd5ed915c93b0c/tenor.gif"
+          alt="pusheen-gaming"
+        />
       </div>
-    </MatchListBlock>
+    </MatchListArea>
   );
 };

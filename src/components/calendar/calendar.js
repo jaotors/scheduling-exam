@@ -65,9 +65,28 @@ const Calendar = () => {
         title: data.event.title,
         start: data.event.allDay ? dateStart : data.event.start,
         end: data.event.allDay ? dateEnd : data.event.end,
+        allDay: data.event.allDay,
         meta: data.event.extendedProps.meta,
       })
     );
+  };
+
+  // for drag-n-drop
+  const onCalendarChange = (data) => {
+    const dateStart = momentDateFormatter(data.event.start);
+    const dateEnd = momentDateFormatter(data.event.end);
+    const matchToUpdate = {
+      ...matches.find((i) => i.id === data.event.id),
+      start: dateStart,
+      end: dateEnd,
+    };
+
+    const index = matches.findIndex((i) => i.id === data.event.id);
+    const updatedMatches = matches
+      .slice(0, index)
+      .concat(matches.slice(index + 1));
+
+    setMatches([...updatedMatches, matchToUpdate]);
   };
 
   const onCalendarRemove = (data) => {
@@ -103,6 +122,7 @@ const Calendar = () => {
         eventAdd={onCalendarAdd}
         eventRemove={onCalendarRemove}
         eventClick={handleEventClick}
+        eventChange={onCalendarChange}
       />
       {showAddModal && (
         <AddMatchLayer
